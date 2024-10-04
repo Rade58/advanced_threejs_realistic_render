@@ -22,7 +22,7 @@ const parameters = {
   "rotate model": 0,
   // default is 1 I think
   "envMapIntensity for every material of model": 5,
-  "envMapIntensity for material of torusKnot": 5,
+  // "envMapIntensity for material of torusKnot": 5,
   // backgroundBluriness: 0.2,
   backgroundBluriness: 0,
   // backgroundIntensity: 5,
@@ -139,8 +139,8 @@ if (canvas) {
   // Meshes, Geometries, Materials
   // ----------------------------------------------
   // ----------------------------------------------
-
-  const torusKnot = new THREE.Mesh(
+  // don't want torusKnot for this scene
+  /* const torusKnot = new THREE.Mesh(
     new THREE.TorusKnotGeometry(1, 0.4, 100, 16),
     // new THREE.MeshBasicMaterial({ color: "white" })
     new THREE.MeshStandardMaterial({
@@ -160,7 +160,7 @@ if (canvas) {
   torusKnot.material.needsUpdate = true;
 
   //
-  scene.add(torusKnot);
+  scene.add(torusKnot); */
 
   //------------------------------------------------
   //------------------------------------------------
@@ -180,7 +180,7 @@ if (canvas) {
 
       scene.background = environmentMap;
 
-      torusKnot.material.envMap = environmentMap;
+      // torusKnot.material.envMap = environmentMap;
 
       gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
         console.log("model loaded");
@@ -233,7 +233,9 @@ if (canvas) {
   scene.background = environmentMap; 
   */
 
-  gui
+  // don't want torus knot in this scene so I don't want any
+  // gui for it
+  /* gui
     .add(parameters, "envMapIntensity for material of torusKnot")
     .min(1)
     .max(10)
@@ -245,7 +247,7 @@ if (canvas) {
       torusKnot.material.needsUpdate = true;
 
       // renderer.render(scene, camera); // don't need to do this
-    });
+    }); */
 
   // ----------------------------------------------
   // ----------------------------------------------
