@@ -1,1 +1,1 @@
-# Realistic render
+# Advanced Threejs workshop - Realistic render
