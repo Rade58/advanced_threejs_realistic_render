@@ -4,11 +4,9 @@ import GUI from "lil-gui";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { GLTFLoader, RGBELoader } from "three/examples/jsm/Addons.js";
 
-// FINAL TWEAKS
-// change env map if you want, go look at magazines, look something else
-// ask your friends if your scene looks good
-// when you come back you will maybe notice if it's to bright, if it;s to light so you can tweak
-// Depending on quality of the monitor things can look bad
+// HAMBURGER
+// We will test our hamburger we built with blender
+// we will load it to the scene
 
 // ------------ gui -------------------
 /**
