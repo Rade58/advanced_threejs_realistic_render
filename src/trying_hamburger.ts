@@ -6,7 +6,25 @@ import { GLTFLoader, RGBELoader } from "three/examples/jsm/Addons.js";
 
 // HAMBURGER
 // We will test our hamburger we built with blender
-// we will load it to the scene
+
+// we will comment out code that loads helmet model
+
+// we will load hamburger to the scene
+
+// when we change envMapIntensity you will see artfacts on the surface of the hamburger
+// a bit strange
+// These artifacts are called shadow acnes
+
+// Shadow acne can occur on both smooth and flat surface for precisions
+// reasons when calculating if the surface is in the shadow or not
+
+// The hamburger is casting a shadow on it's own surface
+
+//  WE NEED TO TWEAK THE LIGHT shadow's:
+// - `bias`   usually helps for flat surfaces
+// - `normalBias`     usually helps for rounded surfaces
+
+// with help of gui we will find the perfect value
 
 // ------------ gui -------------------
 /**
@@ -169,7 +187,7 @@ if (canvas) {
 
       // torusKnot.material.envMap = environmentMap;
 
-      gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
+      /* gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
         console.log("model loaded");
         gltf.scene.scale.setScalar(10);
         gltf.scene.position.y = -4;
@@ -185,6 +203,22 @@ if (canvas) {
         scene.add(gltf.scene);
 
         setEnvironmentMapForMaterialsOfModel(environmentMap);
+      }); */
+
+      // -------------------------------------------------------------
+      // -------------------------------------------------------------
+      //    HAMBURGER
+      // -------------------------------------------------------------
+      // -------------------------------------------------------------
+      gltfLoader.load("/models/custom/hamburger.glb", (gltf) => {
+        gltf.scene.scale.set(0.4, 0.4, 0.4);
+        gltf.scene.position.set(0, -3, 0);
+
+        scene.add(gltf.scene);
+
+        // updateAllMaterials();
+
+        setEnvironmentMapForMaterialsOfModel(environmentMap);
       });
     },
     () => {
@@ -195,6 +229,7 @@ if (canvas) {
       console.error(err);
     }
   );
+
   // -------------------------------------------------------------
   // -------------------------------------------------------------
   // -------------------------------------------------------------
@@ -377,6 +412,19 @@ if (canvas) {
       directionalLight.shadow.camera.updateProjectionMatrix();
       directionalLightCameraHelper.update();
     });
+
+  // normalBias and bias, we test it first with gui
+  // we came to it that these values are appropriate
+
+  directionalLight.shadow.normalBias = 0.027;
+  directionalLight.shadow.bias = -0.004;
+  // ----
+  gui
+    .add(directionalLight.shadow, "normalBias")
+    .min(-0.05)
+    .max(0.05)
+    .step(0.001);
+  gui.add(directionalLight.shadow, "bias").min(-0.05).max(0.05).step(0.001);
 
   // -------------------------------------------------------------
   // -------------------------------------------------------------
