@@ -23,6 +23,17 @@ import { GLTFLoader, RGBELoader } from "three/examples/jsm/Addons.js";
 
 // also directionalLight needs to cast shadow
 
+// we can change where is directional light pointing by changing directionalLight.target.position
+// directionalLight.target.positio.set(0,4,0)
+// directionalLight.target is Object3D
+// Nothing will change unless you pick one of these two:
+// - add target to the scene     or          -  updateWordMatrix()
+// we have chosen second option
+
+// we need to reduce far value of directionalLight.shadow.camera.far  // you need to do this before adding helper if you want to see
+//                                                                     // you need to update projection matrix, and to update helper
+//                                                                      //  if you want to chane it with gui
+
 // we need to activate shadow on the meshes
 
 // ------------ gui -------------------
@@ -71,7 +82,7 @@ if (canvas) {
    */
 
   const gltfLoader = new GLTFLoader();
-  const cubeTextureLoader = new THREE.CubeTextureLoader();
+  // const cubeTextureLoader = new THREE.CubeTextureLoader();
 
   const rgbeLoader = new RGBELoader();
 
@@ -242,13 +253,20 @@ if (canvas) {
   directionalLight.position.set(3, 7, 6);
   scene.add(directionalLight);
 
+  // add this before adding helper
+  directionalLight.shadow.camera.far = 15.0;
+
   const directionalLightCameraHelper = new THREE.CameraHelper(
     directionalLight.shadow.camera
   );
 
+  directionalLight.castShadow = true;
+
+  directionalLight.target.position.set(0, 2, 0);
+  directionalLight.target.updateWorldMatrix(true, true);
+
   scene.add(directionalLightCameraHelper);
 
-  directionalLight.castShadow = true;
   gui.add(directionalLight, "castShadow");
 
   gui
@@ -275,6 +293,47 @@ if (canvas) {
     .max(10)
     .step(0.001)
     .name("directLighZ");
+
+  gui
+    .add(directionalLight.target.position, "x")
+    .min(-10)
+    .max(10)
+    .step(0.001)
+    .name("directLighTargetPositionX")
+    .onChange(() => {
+      directionalLight.target.updateWorldMatrix(true, true);
+    });
+
+  gui
+    .add(directionalLight.target.position, "y")
+    .min(-10)
+    .max(10)
+    .step(0.001)
+    .name("directLighTargetPositionY")
+    .onChange(() => {
+      directionalLight.target.updateWorldMatrix(true, true);
+    });
+
+  gui
+    .add(directionalLight.target.position, "z")
+    .min(-10)
+    .max(10)
+    .step(0.001)
+    .name("directLighTargetPositionZ")
+    .onChange(() => {
+      directionalLight.target.updateWorldMatrix(true, true);
+    });
+
+  gui
+    .add(directionalLight.shadow.camera, "far")
+    .min(-10)
+    .max(20)
+    .step(0.001)
+    .name("directLighShadowCameraFar")
+    .onChange(() => {
+      directionalLight.shadow.camera.updateProjectionMatrix();
+      directionalLightCameraHelper.update();
+    });
 
   // -------------------------------------------------------------
   // -------------------------------------------------------------
