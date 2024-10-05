@@ -34,7 +34,12 @@ import { GLTFLoader, RGBELoader } from "three/examples/jsm/Addons.js";
 //                                                                     // you need to update projection matrix, and to update helper
 //                                                                      //  if you want to chane it with gui
 
-// we need to activate shadow on the meshes
+// We will change map size like this:     directionalLight.shadow.mapSize.set(1024, 1024)   // make sure it is square (both values must be same)
+// if we would use smaller values for example 512 x 512, shadows(we didn't activate them yet), we would have blurry shadows
+// we don't need super shara and super blurry, so we have set to 1024 x 1024
+
+// FINALLY WE NEED TO ACTIVATE SHADOW ON THE MESHES
+// I did this immediate fter loading every mesh in traverse callback by adding    castShadow      and    receiveShadow    for every child
 
 // ------------ gui -------------------
 /**
@@ -123,6 +128,10 @@ if (canvas) {
           child.material.envMap = envMap;
           child.material.envMapIntensity =
             parameters["envMapIntensity for every material of model"];
+
+          // shadows
+          child.castShadow = true;
+          child.receiveShadow = true;
         }
       }
     });
@@ -250,11 +259,13 @@ if (canvas) {
    * @description Directional light
    */
   const directionalLight = new THREE.DirectionalLight("#ffffff", 1);
-  directionalLight.position.set(3, 7, 6);
+  directionalLight.position.set(-4, 6.5, 2.5);
   scene.add(directionalLight);
 
   // add this before adding helper
-  directionalLight.shadow.camera.far = 15.0;
+  directionalLight.shadow.camera.far = 15;
+
+  directionalLight.shadow.mapSize.set(1024, 1024);
 
   const directionalLightCameraHelper = new THREE.CameraHelper(
     directionalLight.shadow.camera
